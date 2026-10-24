@@ -97,7 +97,11 @@
   @keyframes rise { from { opacity: 0; translate: 0 20px; } }
 
   /* ---------- Countdown ---------- */
-  .days { font: italic 400 clamp(1.8rem, 6.5vw, 2.6rem)/1.2 var(--display); text-wrap: balance; }
+  .days { font: italic 400 clamp(1.6rem, 6vw, 2.2rem)/1.2 var(--display); }
+  .days b { display: block; font: 400 clamp(3.6rem, 14vw, 5rem)/1.05 var(--display); font-style: normal; }
+  .date-line { font: 600 clamp(.82rem, 3.4vw, 1rem)/1 var(--serif); letter-spacing: clamp(.14em, 1vw, .3em); text-transform: uppercase; color: var(--accent); padding: 12px 22px; border-block: 1px solid var(--rule); white-space: nowrap; }
+  .when { display: grid; gap: 14px; font: italic 500 clamp(1.15rem, 4.3vw, 1.35rem)/1.5 var(--serif); }
+  @media (min-width: 640px) { .when { grid-template-columns: 1fr 1fr; gap: 32px; } }
 
   /* ---------- Order of the day ---------- */
   .programme h3 { font: 600 .8rem/1 var(--serif); letter-spacing: .38em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
@@ -176,7 +180,7 @@
   <svg class="branch b" viewBox="0 0 300 170" aria-hidden="true"><use href="#branch"/></svg>
   <div class="mono" aria-hidden="true">J&amp;J</div>
   <h1 class="cover-names">Janet <span>&amp;</span> Jude</h1>
-  <p class="caps">The seventeenth of April · 2027</p>
+  <p class="caps">Saturday · 17 April 2027</p>
   <button class="btn" id="begin" type="button">Begin our day</button>
 </div>
 
@@ -191,9 +195,13 @@
       <span class="name">Jude</span>
       <p class="caps muted">Son of Selva and Rani</p>
     </div>
-    <p class="formal" style="--i:3">joyfully invite you to their wedding celebration<br>on Saturday, the seventeenth of April<br>two thousand and twenty-seven<br>at three o’clock in the afternoon</p>
+    <p class="formal" style="--i:3">joyfully invite you to their wedding celebration</p>
+    <p class="date-line" style="--i:3">Saturday · 17 April · 2027</p>
     <p class="rule" style="--i:4">✦</p>
-    <p class="formal" style="--i:5">St Helens RC Church, Watford<br><span class="muted">and afterwards at</span><br>Sarratt Village Hall<b class="accent">Reception from half past four</b></p>
+    <div class="when" style="--i:5">
+      <p><span class="caps accent">Ceremony · 3:00 pm</span><br>St Helens RC Church, Watford</p>
+      <p><span class="caps accent">Reception · 4:30 pm</span><br>Sarratt Village Hall</p>
+    </div>
   </section>
 
   <section class="reveal">
@@ -504,22 +512,12 @@
   const burst = () => !still && petals(22, true);
   if (!still) petals(6);
 
-  // the days, written out as words, the way an invitation would
-  const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-  const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-  const words = n => {
-    const under100 = m => m < 20 ? ONES[m] : TENS[Math.floor(m / 10)] + (m % 10 ? '-' + ONES[m % 10] : '');
-    if (n < 100) return under100(n);
-    const h = Math.floor(n / 100), r = n % 100;
-    return ONES[h] + ' hundred' + (r ? ' and ' + under100(r) : '');
-  };
-  console.assert(words(175) === 'one hundred and seventy-five' && words(21) === 'twenty-one' && words(300) === 'three hundred', 'number words');
   const wedding = new Date('2027-04-17T15:00:00+01:00');
   (function tick() {
     const s = Math.floor((wedding - Date.now()) / 1000);
     if (s <= 0) { $('days').textContent = 'Today is the day'; $('hms').hidden = true; return; }
     const dd = Math.floor(s / 86400), hh = Math.floor(s / 3600) % 24, mm = Math.floor(s / 60) % 60, ss = s % 60;
-    $('days').textContent = dd ? `${words(dd).replace(/^./, ch => ch.toUpperCase())} ${dd === 1 ? 'day' : 'days'} to go` : 'Tomorrow';
+    $('days').innerHTML = `<b>${dd}</b>${dd === 1 ? 'day' : 'days'} to go`;
     $('hms').textContent = `${hh} hours · ${mm} minutes · ${ss} seconds`;
     setTimeout(tick, 1000);
   })();
