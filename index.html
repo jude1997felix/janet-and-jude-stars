@@ -107,12 +107,7 @@
   .moment time { font: 500 .78rem/1.4 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--accent); }
   .moment b { font: italic 500 1.4rem/1.25 var(--display); }
   .moment i { font: 400 .98rem/1.5 var(--sans); color: var(--muted); font-style: normal; }
-  /* the sky's own moments: sun, moon and stars, set apart from the people's timetable */
-  .moment.sky { border: 1px dashed var(--accent); }
-  .moment.sky b { font-size: 1.2rem; }
-  .moment.sky::before { border-radius: 50%; background: radial-gradient(circle, #ffe7a3 0 40%, #f5a35f 41% 100%); border-color: transparent; }
-  .moment.sky.moon::before { background: radial-gradient(circle at 62% 40%, #fdf6e0 0 55%, #c9cde0 56%); }
-  .moment.sky.stars::before { background: none; border: 0; content: "✦"; color: var(--accent); width: auto; height: auto; top: 12px; left: -38px; font-size: 1.1rem; }
+  .pause { height: 160px; }
   @media (min-width: 720px) {
     .day::before, .day .line { left: calc(50% - 1px); }
     .day h3 { justify-self: center; margin-left: 0; position: relative; z-index: 1; }
@@ -121,8 +116,6 @@
     .moment.r { justify-self: end; }
     .moment::before { left: auto; right: -68px; }
     .moment.r::before { right: auto; left: -68px; }
-    .moment.sky { justify-self: center; width: auto; max-width: 360px; text-align: center; margin-top: 4px; }
-    .moment.sky::before, .moment.sky.stars::before { left: 50%; right: auto; top: -26px; translate: -50% 0; }
   }
 
   /* ---------- Venues ---------- */
@@ -140,7 +133,6 @@
   }
   #cover.open ~ #clock { opacity: 1; }
   #clock canvas { width: 22px; height: 22px; }
-  #clock small { color: var(--muted); letter-spacing: .08em; font-weight: 400; }
 
   .petal { position: fixed; top: -20px; left: var(--x); z-index: 5; width: var(--s); height: var(--s); pointer-events: none;
     background: var(--blossom); border-radius: 80% 0 80% 0; opacity: calc(.75 - var(--d) * .45); animation: fall var(--t) linear var(--dl) infinite; }
@@ -222,23 +214,19 @@
   <section class="reveal">
     <p class="eyebrow">Saturday 17 April 2027</p>
     <h2>Sunlight to starlight</h2>
-    <p style="color:var(--muted);max-width:36ch">Scroll through our day. The sky behind follows the real sun and moon over Sarratt, hour by hour.</p>
     <div class="day" id="day">
       <span class="line" aria-hidden="true"></span>
       <h3 class="glass">Church ceremony</h3>
       <div class="moment glass l" data-t="14:30"><time>2:30 pm</time><b>Guest arrival &amp; seating</b><i>Find a seat and say your hellos</i></div>
       <div class="moment glass r" data-t="15:00"><time>3:00 pm</time><b>Church wedding ceremony</b><i>Here comes the bride</i></div>
       <div class="moment glass l" data-t="15:30"><time>3:30 pm</time><b>Exchange of vows &amp; rings</b><i>Two “I do”s and a few happy tears</i></div>
-      <div class="moment sky moon glass" data-t="16:04"><time>4:04 pm</time><b>Moonrise</b><i>An almost-full moon rises in the east</i></div>
       <h3 class="glass">Reception</h3>
       <div class="moment glass r" data-t="16:30"><time>4:30 pm</time><b>Guest arrival &amp; welcome</b><i>The party moves to Sarratt</i></div>
       <div class="moment glass l" data-t="17:30"><time>5:30 pm</time><b>Couple arrival &amp; cake cutting</b><i>The newlyweds make their entrance</i></div>
       <div class="moment glass r" data-t="18:00"><time>6:00 pm</time><b>Dinner, speeches &amp; performances</b><i>Good food and a few surprises</i></div>
       <div class="moment glass l" data-t="20:00"><time>8:00 pm</time><b>Dance floor opens</b><i>Bring your best moves</i></div>
-      <div class="moment sky glass" data-t="20:01"><time>8:01 pm</time><b>Sunset</b><i>The sun slips below the west-northwest horizon</i></div>
-      <div class="moment sky stars glass" data-t="20:37"><time>8:37 pm</time><b>First stars</b><i>Twilight deepens and the brightest stars appear</i></div>
+      <div class="pause" data-t="21:10" aria-hidden="true"></div>
       <div class="moment glass r" data-t="22:00"><time>10:00 pm</time><b>Farewell &amp; guest send-off</b><i>Goodnight, with full hearts</i></div>
-      <div class="moment sky moon glass" data-t="22:14"><time>10:14 pm</time><b>True night</b><i>Full darkness, and the moon rides high in the south</i></div>
     </div>
     <a class="btn" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Janet+%26+Jude%27s+Wedding&dates=20270417T143000/20270417T220000&ctz=Europe/London&location=St+Helens+RC+Church%2C+8+Middle+Way%2C+Watford+WD24+6NJ&details=Ceremony+3%3A00+PM+at+St+Helens+RC+Church%2C+Watford.+Reception+from+4%3A30+PM+at+Sarratt+Village+Hall%2C+The+Green%2C+Sarratt%2C+Rickmansworth+WD3+6AS.">Save the date</a>
   </section>
@@ -276,7 +264,7 @@
   </section>
 </main>
 
-<div id="clock" class="glass" aria-hidden="true"><canvas width="44" height="44"></canvas><span id="clock-time">2:00 pm</span><small id="clock-note">afternoon sun</small></div>
+<div id="clock" class="glass" aria-hidden="true"><canvas width="44" height="44"></canvas><span id="clock-time">2:00 pm</span></div>
 
 <script>
   const $ = id => document.getElementById(id);
@@ -325,7 +313,6 @@
     return anchors.length ? anchors[anchors.length - 1].t : 840;
   }
   const fmt = m => { let h = Math.floor(m / 60), mm = Math.floor(m % 60); const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return `${h}:${String(mm).padStart(2, '0')} ${ap}`; };
-  const note = (alt, malt) => alt > 12 ? 'afternoon sun' : alt > 2 ? 'golden hour' : alt > -1.5 ? 'sunset' : alt > -6 ? 'twilight' : alt > -12 ? 'first stars' : malt > 0 ? 'moonlight' : 'night';
 
   // ---------- the sky ----------
   const cv = $('sky'), cx = cv.getContext('2d'), mini = document.querySelector('#clock canvas').getContext('2d');
@@ -407,7 +394,6 @@
     });
     // the little clock
     $('clock-time').textContent = fmt(min);
-    $('clock-note').textContent = note(salt, malt);
     mini.clearRect(0, 0, 44, 44);
     if (salt > -1.5) { mini.fillStyle = rgb(mix([255, 214, 120], [255, 140, 80], Math.max(0, Math.min(1, (12 - salt) / 12)))); mini.beginPath(); mini.arc(22, 22, 13, 0, 6.283); mini.fill(); }
     else drawMoon(mini, 22, 22, 15, lit, Math.PI * .95, 1);
